@@ -1,2 +1,2 @@
 # docker-yamlint
-Docker images with python3.9 and installed package [yamllint](https://pypi.org/project/yamllint/#history)
+Docker image based on python3.9 with installed [yamllint](https://pypi.org/project/yamllint/#history)
