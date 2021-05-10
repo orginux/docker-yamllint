@@ -12,7 +12,7 @@ Change $PWD on a path in the local file system
 ```yaml
 ---
 yamllint:
-  image: orginux/yamllint:1.25.0
+  image: orginux/yamllint:1.25.1
   stage: lint
   variables:
     MAX_LEN: 120
