@@ -11,7 +11,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  IMAGE_TAG: 1.33.0.${{ github.run_number }}
+  IMAGE_TAG: 1.33.${{ github.run_number }}
 
 jobs:
   hadolint:
@@ -45,21 +45,19 @@ jobs:
             type=ref,event=pr
             type=semver,pattern={{version}},value=${{ env.IMAGE_TAG }}
 
-  push-image:
-    runs-on: ubuntu-latest
-    needs:
-      - build-image
-    steps:
-      - name: Build and export
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
-          pull: true
-          push: false
+          pull: false
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=docker,dest=/tmp/ktg-latest.tar
-
-      - name: Push image
-        run: |
-          docker push --all-tags  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
