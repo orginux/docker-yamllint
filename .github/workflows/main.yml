@@ -24,10 +24,10 @@ jobs:
         with:
           dockerfile: Dockerfile
 
-  build-docker:
-    needs:
-      - build-go
+  build-image:
     runs-on: ubuntu-latest
+    need:
+      - hadolint
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -45,6 +45,11 @@ jobs:
             type=ref,event=pr
             type=semver,pattern={{version}},value=${{ env.IMAGE_TAG }}
 
+  push-image:
+    runs-on: ubuntu-latest
+    need:
+      - build-image
+    steps:
       - name: Build and export
         uses: docker/build-push-action@v4
         with:
